@@ -2,3 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-input {
+  border: 1px solid #d1d5db; 
+  color: #000000;
+  background-color: #e5e7eb; 
+  font-size: 0.875rem; 
+  border-radius: 0.5rem; 
+  width: 100%; 
+  padding: 0.625rem; 
+}
+
+.custom-input:focus {
+  outline: none; 
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); 
+}
+.custom-label {
+  display: block; 
+  margin-bottom: 0.5rem; 
+  font-size: 0.875rem; 
+  font-weight: 500; 
+  color: #000000; 
+}
+

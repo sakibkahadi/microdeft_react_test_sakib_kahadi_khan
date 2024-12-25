@@ -1,4 +1,5 @@
 "use client";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -28,6 +29,12 @@ const Navbar = () => {
       <Link className="hover:underline" href="/register">
         Register
       </Link>
+      <button
+        onClick={() => signOut()}
+        className="btn btn-error btn-outline text-white rounded-full px-5"
+      >
+        Logout
+      </button>
     </>
   );
 
