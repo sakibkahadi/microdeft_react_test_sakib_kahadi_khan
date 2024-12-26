@@ -1,11 +1,16 @@
 "use client";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
+
+import Button from "@/components/ui/Button";
+import CustomLinks from "@/components/ui/CustomLinks";
+
+import Image from "next/image";
+
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [token, setToken] = useState(false);
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -14,27 +19,21 @@ const Navbar = () => {
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
   };
-
+  const handleLogout = () => {
+    console.log("token removed");
+    localStorage.removeItem("accessToken");
+    setToken(false);
+  };
   const navLinks = (
     <>
-      <Link className="hover:underline" href="/courses">
-        Courses
-      </Link>
-      <Link className="hover:underline" href="/add-course">
-        Add Course
-      </Link>
-      <Link className="hover:underline" href="/login">
-        Login
-      </Link>
-      <Link className="hover:underline" href="/register">
-        Register
-      </Link>
-      <button
-        onClick={() => signOut()}
-        className="btn btn-error btn-outline text-white rounded-full px-5"
-      >
-        Logout
-      </button>
+      <CustomLinks href="/courses" text="Courses" />
+      <CustomLinks href="/add-course" text="Add Course" />
+
+      {token ? (
+        <Button onClick={handleLogout} text="LogOut" />
+      ) : (
+        <CustomLinks href="/login" text="Login" />
+      )}
     </>
   );
 
@@ -54,16 +53,25 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="relative">
-      <div className="flex bg-red-100 justify-between items-center">
+    <div className="relative container mx-auto  ">
+      <div className="flex px-5 py-4  justify-between items-center">
         {/* Logo Section */}
-        <div className=" p-5  ">logo</div>
+        <div className=" ">
+          <Image
+            src="https://microdeft.com/wp-content/uploads/2021/11/Asset-1.svg"
+            height={170}
+            width={170}
+            alt="icon"
+          />
+        </div>
 
         {/* links section */}
-        <div className=" p-5">
+        <div className=" ">
           {/* lg devices: pc, laptop */}
           <div className=" hidden lg:block p-5 ">
-            <ul className="flex justify-center gap-5">{navLinks}</ul>
+            <ul className="flex  items-center text-black font-medium justify-center gap-10">
+              {navLinks}
+            </ul>
           </div>
           {/* small and medium devices-mobile, tablets */}
           <div className="lg:hidden " onClick={handleDrawerOpen}>
@@ -82,7 +90,7 @@ const Navbar = () => {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-green-500 transform transition-transform duration-300 z-20 ${
+        className={`fixed top-0 right-0 h-full w-64 bg-slate-700 transform transition-transform duration-300 z-20 ${
           isDrawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -95,8 +103,10 @@ const Navbar = () => {
           />
         </div>
         {/* Links Content */}
-        <div className="p-5 text-white">
-          <ul className=" flex flex-col gap-2 ">{navLinks}</ul>
+        <div className="p-5 ">
+          <ul className=" text-white font-medium flex flex-col gap-2 ">
+            {navLinks}
+          </ul>
         </div>
       </div>
     </div>

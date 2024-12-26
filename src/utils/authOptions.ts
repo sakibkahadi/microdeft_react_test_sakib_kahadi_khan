@@ -1,7 +1,10 @@
-import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [],
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    error: "/auth/error",
+  },
 };
-export default NextAuth(authOptions);

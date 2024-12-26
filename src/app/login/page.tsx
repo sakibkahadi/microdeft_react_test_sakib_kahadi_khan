@@ -1,39 +1,38 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { registerUser } from "@/utils/actions/registerUser";
+import { loginUser } from "@/utils/actions/loginUser";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
-export type UserData = {
-  name: string;
+export type FormValues = {
   email: string;
   password: string;
 };
 
-const RegisterPage = () => {
+const LoginPage = () => {
   const [showError, setShowError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserData>();
+  } = useForm<FormValues>();
   const router = useRouter();
-  const onSubmit = async (data: UserData) => {
-    console.log(data);
 
+  const onSubmit = async (data: FormValues) => {
     try {
-      const res = await registerUser(data);
-      if (res.status) {
-        setShowError("");
-        toast.success(`${res.status_message}`);
+      const res = await loginUser(data);
+      console.log(res);
+      if (res.data.token) {
+        localStorage.setItem("accessToken", res.data.token);
+        // location.reload();/
+        router.push("/");
       }
     } catch (err: any) {
-      setShowError("The email has already been taken.");
+      setShowError("Invalid email");
     }
   };
 
@@ -41,29 +40,11 @@ const RegisterPage = () => {
     <div className="my-10">
       <Toaster position="bottom-right" />
       <div className="p-1">
-        <div className="  md:w-2/3 lg:w-2/3 xl:w-3/5 mx-auto border  border-dashed py-2 px-4">
+        <div className=" md:w-2/3 lg:w-2/3 xl:w-3/5 mx-auto border  border-dashed py-2 px-4 ">
           <h1 className="text-center text-4xl mb-5">
-            Register <span className="text-cyan-800">Now</span>
+            Login<span className="text-teal-600"> Now</span>
           </h1>
           <form onSubmit={handleSubmit(onSubmit)} className="py-3 space-y-5">
-            {/* name*/}
-            <div className="form-control">
-              <label className=" custom-label">
-                <span className="label-text">Full Name</span>
-              </label>
-              <input
-                type="text"
-                {...register("name", { required: "Name is required" })}
-                placeholder="User Name"
-                className=" custom-input"
-              />
-              {errors.name && (
-                <span className="text-red-500 text-sm">
-                  {errors.name.message}
-                </span>
-              )}
-            </div>
-
             {/* email */}
             <div className="form-control">
               <label className="block mb-2 text-sm font-medium text-black">
@@ -110,16 +91,16 @@ const RegisterPage = () => {
             <div className="form-control mt-6">
               <button
                 type="submit"
-                className="w-full text-white bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-br focus:ring-1 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                className="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-1 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
               >
                 Register
               </button>
             </div>
 
             <p className="text-center">
-              Already have an account?{" "}
-              <Link className="underline text-cyan-600" href="/login">
-                Login
+              New here? Create an account{" "}
+              <Link className="underline text-green-500" href="/register">
+                Register Now
               </Link>
             </p>
           </form>
@@ -129,4 +110,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;
