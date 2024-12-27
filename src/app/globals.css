@@ -24,3 +24,23 @@
   color: #000000; 
 }
 
+input[type='color'] {
+  padding: 0;
+  width: 150%;
+  height: 150%;
+  margin: -25%;
+ 
+}
+
+.cp_wrapper {
+  overflow: hidden;
+  width: 2.5em;
+  height: 2.5em;
+  /* optional formatting below here */
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px 0px grey;
+  margin: 1em;
+ 
+  margin-top: 3px;
+}
+

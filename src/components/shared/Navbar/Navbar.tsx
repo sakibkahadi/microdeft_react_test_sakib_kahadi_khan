@@ -27,7 +27,7 @@ const Navbar = () => {
   const navLinks = (
     <>
       <CustomLinks href="/courses" text="Courses" />
-      <CustomLinks href="/add-course" text="Add Course" />
+      <CustomLinks href="/add-courses" text="Add Course" />
 
       {token ? (
         <Button onClick={handleLogout} text="LogOut" />
