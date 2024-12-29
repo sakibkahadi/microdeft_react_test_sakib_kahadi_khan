@@ -10,7 +10,28 @@ Clone this repository to your local machine:
 
 ```bash
 git clone https://github.com/sakibkahadi/microdeft_react_test_sakib_kahadi_khan.git
-cd livelink
-Install dependencies using npm install.
-Run the project using npm run dev.
+
+```
+
+```bash
+cd microdeft_react_test_sakib_kahadi_khan
+
+```
+
+### 2. Install dependencies
+
+Run the command:
+
+```bash
+npm install
+
+```
+
+### 3. Run the project.
+
+Run the command
+
+```bash
+npm run dev.
+
 ```
