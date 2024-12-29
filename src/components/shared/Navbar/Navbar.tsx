@@ -2,6 +2,7 @@
 
 import Button from "@/components/ui/Button";
 import CustomLinks from "@/components/ui/CustomLinks";
+import { signOut, useSession } from "next-auth/react";
 
 import Image from "next/image";
 
@@ -9,8 +10,9 @@ import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [token, setToken] = useState(false);
 
   const handleDrawerOpen = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -20,17 +22,16 @@ const Navbar = () => {
     setIsDrawerOpen(false);
   };
   const handleLogout = () => {
-    console.log("token removed");
-    localStorage.removeItem("accessToken");
-    setToken(false);
+    signOut();
   };
   const navLinks = (
     <>
-      <CustomLinks href="/courses" text="Courses" />
-      <CustomLinks href="/add-courses" text="Add Course" />
-
-      {token ? (
-        <Button onClick={handleLogout} text="LogOut" />
+      {session?.user ? (
+        <>
+          <CustomLinks href="/courses" text="Courses" />
+          <CustomLinks href="/add-course" text="Add Course" />
+          <Button onClick={handleLogout} text="LogOut" />
+        </>
       ) : (
         <CustomLinks href="/login" text="Login" />
       )}

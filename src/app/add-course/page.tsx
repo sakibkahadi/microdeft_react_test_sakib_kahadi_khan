@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { accessToken } from "@/utils/token";
+import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -15,6 +15,11 @@ export type TCourses = {
 };
 
 const AddCoursePage = () => {
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    <h1 className="text-4xl text-center text-red-500">Loading..........</h1>;
+  }
+  const token = session?.user?.accessToken;
   const {
     register,
     handleSubmit,
@@ -23,7 +28,6 @@ const AddCoursePage = () => {
 
   const onSubmit = async (data: TCourses) => {
     try {
-      const token: string | null = localStorage.getItem("accessToken");
       const res = await fetch(
         "https://react-interview.crd4lc.easypanel.host/api/course",
         {

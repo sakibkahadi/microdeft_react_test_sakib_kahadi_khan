@@ -3,9 +3,10 @@
 "use client";
 
 import { registerUser } from "@/utils/actions/registerUser";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -17,12 +18,25 @@ export type UserData = {
 
 const RegisterPage = () => {
   const [showError, setShowError] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkIfUserIsAlreadyLoggedIn = async () => {
+      const session = await getSession();
+      console.log(session);
+      if (session) {
+        router.push("/courses");
+      }
+    };
+
+    checkIfUserIsAlreadyLoggedIn();
+  }, [router]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<UserData>();
-  const router = useRouter();
+
   const onSubmit = async (data: UserData) => {
     console.log(data);
 
@@ -31,6 +45,7 @@ const RegisterPage = () => {
       if (res.status) {
         setShowError("");
         toast.success(`${res.status_message}`);
+        router.push("/login");
       }
     } catch (err: any) {
       setShowError("The email has already been taken.");

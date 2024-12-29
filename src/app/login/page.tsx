@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { loginUser } from "@/utils/actions/loginUser";
+import { getSession, signIn } from "next-auth/react";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Toaster } from "react-hot-toast";
 
@@ -15,21 +17,37 @@ export type FormValues = {
 
 const LoginPage = () => {
   const [showError, setShowError] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const checkIfUserIsAlreadyLoggedIn = async () => {
+      const session = await getSession();
+      console.log(session);
+      if (session) {
+        router.push("/courses");
+      }
+    };
+
+    checkIfUserIsAlreadyLoggedIn();
+  }, [router]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
-  const router = useRouter();
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const res = await loginUser(data);
-      console.log(res);
-      if (res.data.token) {
-        localStorage.setItem("accessToken", res.data.token);
-        // location.reload();/
-        router.push("/");
+      const callbackUrl = searchParams.get("callbackUrl") || "/courses";
+      console.log(callbackUrl);
+      const res = await signIn("credentials", {
+        callbackUrl,
+        email: data.email,
+        password: data.password,
+        redirect: true,
+      });
+      if (res?.status) {
+        router.push(callbackUrl);
       }
     } catch (err: any) {
       setShowError("Invalid email");
